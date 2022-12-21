@@ -6,7 +6,7 @@ const helmet = require("helmet");
 const compression = require("compression");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-const routerNavigation = require("./routes"); // ./routes/index.js
+const routerNavigation = require("."); // ./routes/index.js
 
 const app = express();
 const port = process.env.PORT;

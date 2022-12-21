@@ -53,14 +53,51 @@ module.exports = {
 
   postObat: async (req, res) => {
     try {
-      const { nama_obat, stok, harga } = req.body;
+      const { nama_obat, stok, category } = req.body;
       const setData = {
         nama_obat,
         stok,
-        harga,
+        category,
       };
       const result = await obatModel.postObat(setData);
       return helperWrapper.response(res, 200, "Succes create data", result);
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `bad request (${error.message})`,
+        null
+      );
+    }
+  },
+
+  updateObat: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const checkId = await obatModel.getObatbyid(id);
+      if (checkId.length < 1) {
+        return helperWrapper.response(
+          res,
+          404,
+          `data by id ${id} not found !`,
+          null
+        );
+      }
+      const { nama_obat, stok, category } = req.body;
+      const setData = {
+        nama_obat,
+        stok,
+        category,
+      };
+      // untuk mengupdate salah satu field saja
+      Object.keys(setData).forEach((data) => {
+        if (!setData[data]) {
+          delete setData[data];
+        }
+      });
+
+      const result = await obatModel.updateObat(setData, id);
+      return helperWrapper.response(res, 200, "succes update data", result);
     } catch (error) {
       return helperWrapper.response(
         res,

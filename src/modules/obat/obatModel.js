@@ -16,6 +16,21 @@ module.exports = {
       );
     }),
 
+    getObatbyid: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT * FROM data_obat WHERE id = ?",
+        id,
+        (err, result) => {
+          if (!err) {
+            resolve(result);
+          } else {
+            reject(new Error(`SQL : ${err.sqlMessage}`));
+          }
+        }
+      );
+    }),
+
     getCountObat: (search) =>
     new Promise((resolve, reject) => {
       connection.query(
@@ -49,5 +64,24 @@ module.exports = {
       );
       // eslint-disable-next-line no-console
       console.log(query.sql);
+    }),
+
+    updateObat: (data, id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE data_obat SET ? WHERE id = ?",
+        [data, id],
+        (error) => {
+          if (!error) {
+            const newResult = {
+              id,
+              ...data,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(`SQL : ${error.sqlMessage}`));
+          }
+        }
+      );
     }),
 };
